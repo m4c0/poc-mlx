@@ -5,12 +5,12 @@ import random
 
 def conv(line):
     j = json.loads(line)
-    inst = j['instruction']
-    inpt = j['input']
-    outp = j['output']
-    text = f'<|im_start|>S<|im_end|>{inst}<|im_start|>U<|im_end|>{inpt}<|im_start|>A<|im_end|>{outp}<|endoftext|>'
-    obj = { "text": text }
-    return json.dumps(obj)
+    msgs = [
+        { "role": "system",    "content": j['instruction'] },
+        { "role": "user",      "content": j['input'] },
+        { "role": "assistant", "content": j['output'] },
+    ]
+    return json.dumps({ "messages": msgs })
 
 lines = []
 with open("task_data.json") as f:
