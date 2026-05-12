@@ -1,19 +1,16 @@
 import json
 import random
 
-# https://huggingface.co/datasets/yuncongli/chat-sentiment-analysis
+# https://huggingface.co/datasets/Abirate/english_quotes
 
 def conv(line):
     j = json.loads(line)
-    msgs = [
-        { "role": "system",    "content": j['instruction'] },
-        { "role": "user",      "content": j['input'] },
-        { "role": "assistant", "content": j['output'] },
-    ]
+    msgs = [{ "role": "user",      "content": j['quote'][1:-1] },
+            { "role": "assistant", "content": j['author'] }]
     return json.dumps({ "messages": msgs })
 
 lines = []
-with open("task_data.json") as f:
+with open("quotes.jsonl") as f:
     lines = [conv(line) for line in f]
 
 random.shuffle(lines)

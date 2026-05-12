@@ -1,5 +1,6 @@
 import types
 import yaml
+from mlx_lm.generate import generate
 from mlx_lm.tuner import datasets
 from mlx_lm.utils import load
 from mlx_lm import lora
@@ -25,4 +26,11 @@ tokenizer.chat_template = (
 train_set, valid_set, test_set = datasets.load_dataset(args, tokenizer)
 lora.train_model(args, model, train_set, valid_set)
 lora.evaluate_model(args, model, test_set)
+
+model.eval()
+prompt = tokenizer.apply_chat_template([
+    {"role": "user", "content": "Be yourself; everyone else is already taken."}
+    ], add_generation_prompt=True, tokenize=False)
+response = generate(model, tokenizer, prompt=prompt, max_tokens=30)
+print(response)
 
